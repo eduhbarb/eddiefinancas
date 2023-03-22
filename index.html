@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="img/catdabloon.jpg">
+  <title>Eddie Finanças</title>
+
+<body>
+
+  <div class="inicio">
+    <div class="img-catdabloon">
+      <img src="img/catdabloon.jpg" alt="">
+    </div>
+
+    <div class="textos">
+      <div class="titulo">
+        Eddie Finanças
+      </div>
+
+      <div class="dabloon-area">
+        <div><b>💵R$<span id="salario">0</span> <span id="texto-dabloon">SALÁRIO</span></b></div>
+        <div><b>🚆R$<span id="transporte">0</span> <span id="texto-dabloon">VALE TRANSPORTE</span></b></div>
+        <div><b>🍔R$<span id="refeicao">0</span> <span id="texto-dabloon">VALE REFEIÇÃO</span></b></div>
+      </div>
+    </div>
+
+
+    <div class="operando-dabloons">
+
+      <div class="sessão-dabloon-input-buttons">
+        <div class="input-dabloons">
+          <input id="insere_valor" type="text" placeholder="Insira a quantia de Dabloons" value="0.00"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+        </div>
+
+        <div class="radio-opcao">
+          <form>
+            <input type="radio" id="opcao1" name="opcao" value="1" onchange="mostrarValor()"> <label for="opcao1">Salario</label><br>
+            <input type="radio" id="opcao2" name="opcao" value="2" onchange="mostrarValor()"> <label for="opcao2">Vale Transporte</label><br>
+            <input type="radio" id="opcao3" name="opcao" value="3" onchange="mostrarValor()"> <label for="opcao3">Vale Refeição</label> <p></p><br>
+          </form>
+
+        </div>
+
+        <div class="botoes-operacoes">
+          <button onclick="depositar()">DEPOSITAR</button>
+          <button onclick="definir()">DEFINIR</button>
+          <button onclick="retirar()">RETIRAR</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="merchan">
+    <span> Desenvolvido por <b>Eduardo Barbosa</b></span>
+    <span>Acesse meu <a
+        style="text-decoration: none; color: rgb(0, 0, 0); border: 1px solid white; border-radius: 0.5rem; padding: 0.2rem; background-color: rgb(253, 196, 7);"
+        href="https://eduhbarb.github.io/portfolio/" target="_blank" rel="noopener noreferrer"><b>PORTFÓLIO ❤</b></a>
+    </span>
+    <span>Acesse meu <a
+        style="text-decoration: none; color: rgb(0, 0, 0); border: 1px solid white; border-radius: 0.5rem; padding: 0.2rem; background-color: rgb(7, 224, 253);"
+        href="https://www.tiktok.com/@sou_snips" target="_blank" rel="noopener noreferrer"><b>TIKTOK 🤍</b></a> </span>
+  </div>
+
+  <div class="area-perigo">
+    <button onclick="confirmaApagar()">LIMPAR TODAS AS INFORMAÇÕES</button>
+  </div>
+
+
+
+
+
+
+  <script type="text/javascript">
+
+    function confirmaApagar() {
+      let text = "ISSO VAI APAGAR TODOS OS SEUS DADOS!\nAperte OK para confirmar, ou Cancele.";
+      if (confirm(text) == true) {
+        limpaTUDO();
+      } else {
+        return
+      }
+      document.getElementById("demo").innerHTML = text;
+    }
+
+    function verifica_Salario() {
+      if (localStorage.getItem("qtd_salario") === null) {
+        parseInt(localStorage.setItem("qtd_salario", 0));
+      }
+      else {
+        return
+      }
+    }
+
+    function verifica_Transporte() {
+      if (localStorage.getItem("qtd_transporte") === null) {
+        parseInt(localStorage.setItem("qtd_transporte", 0));
+      }
+      else {
+        return
+      }
+    }
+
+    function verifica_Refeicao() {
+      if (localStorage.getItem("qtd_refeicao") === null) {
+        parseInt(localStorage.setItem("qtd_refeicao", 0));
+      }
+      else {
+        return
+      }
+    }
+
+
+    verifica_Salario();
+    verifica_Refeicao();
+    verifica_Transporte();
+    mostra_Valores();
+    let saldo_salario = parseInt(localStorage.getItem("qtd_salario"));
+    let saldo_transporte = parseInt(localStorage.getItem("qtd_transporte"));
+    let saldo_refeicao = parseInt(localStorage.getItem("qtd_refeicao"));
+
+
+    function mostra_Valores() {
+      document.getElementById("salario").innerHTML = localStorage.getItem("qtd_salario");
+      document.getElementById("refeicao").innerHTML = localStorage.getItem("qtd_refeicao");
+      document.getElementById("transporte").innerHTML = localStorage.getItem("qtd_transporte");
+      
+    }
+
+
+    function depositar() {
+
+      // Obter o elemento radio button que foi selecionado
+      var radioButton = document.querySelector('input[name="opcao"]:checked');
+      if (radioButton) {
+        // Obter o valor da opção selecionada
+        var opcaoSelecionada = radioButton.value;
+        let quantidade = document.getElementById('insere_valor').value;
+
+        // Usar switch case para executar uma ação com base na opção selecionada
+        switch (opcaoSelecionada) {
+          case "1":
+            quantidade = isNaN(quantidade) ? 0 : parseFloat(quantidade);
+            saldo_salario += quantidade;
+            let salarioFormatado = saldo_salario.toFixed(2);
+            localStorage.setItem("qtd_salario", salarioFormatado);
+            mostra_Valores();
+      
+            break;
+          case "2":
+            quantidade = isNaN(quantidade) ? 0 : parseFloat(quantidade);
+            saldo_transporte += quantidade;
+            let transporteFormatado = saldo_transporte.toFixed(2);
+            localStorage.setItem("qtd_transporte", transporteFormatado);
+            mostra_Valores();
+      
+            break;
+          case "3":
+          quantidade = isNaN(quantidade) ? 0 : parseFloat(quantidade);
+            saldo_refeicao += quantidade;
+            let refeicaoFormatado = saldo_refeicao.toFixed(2);
+            localStorage.setItem("qtd_refeicao", refeicaoFormatado);
+            mostra_Valores();
+            
+            break;
+          default:
+            // Se nenhuma opção foi selecionada, exibir mensagem de erro
+            alert("Por favor, selecione uma opção.");
+            break;
+        }
+      }
+    }
+
+    function retirar() {
+
+// Obter o elemento radio button que foi selecionado
+var radioButton = document.querySelector('input[name="opcao"]:checked');
+if (radioButton) {
+  // Obter o valor da opção selecionada
+  var opcaoSelecionada = radioButton.value;
+  let quantidade = document.getElementById('insere_valor').value;
+
+  // Usar switch case para executar uma ação com base na opção selecionada
+  switch (opcaoSelecionada) {
+    case "1":
+      quantidade = isNaN(quantidade) ? 0 : parseFloat(quantidade);
+      saldo_salario -= quantidade;
+            let salarioFormatado = saldo_salario.toFixed(2);
+            localStorage.setItem("qtd_salario", salarioFormatado);
+      mostra_Valores();
+      break;
+    case "2":
+      quantidade = isNaN(quantidade) ? 0 : parseFloat(quantidade);
+      saldo_transporte -= quantidade;
+                  let transporteFormatado = saldo_transporte.toFixed(2);
+            localStorage.setItem("qtd_transporte", transporteFormatado);
+      mostra_Valores();
+      break;
+    case "3":
+    quantidade = isNaN(quantidade) ? 0 : parseFloat(quantidade);
+      saldo_refeicao -= quantidade;
+      let refeicaoFormatado = saldo_refeicao.toFixed(2);
+            localStorage.setItem("qtd_refeicao", refeicaoFormatado);
+      mostra_Valores();
+      break;
+    default:
+      // Se nenhuma opção foi selecionada, exibir mensagem de erro
+      alert("Por favor, selecione uma opção.");
+      break;
+  }
+}
+}
+
+function definir() {
+
+// Obter o elemento radio button que foi selecionado
+var radioButton = document.querySelector('input[name="opcao"]:checked');
+if (radioButton) {
+  // Obter o valor da opção selecionada
+  var opcaoSelecionada = radioButton.value;
+  let quantidade = document.getElementById('insere_valor').value;
+
+  // Usar switch case para executar uma ação com base na opção selecionada
+  switch (opcaoSelecionada) {
+    case "1":
+      quantidade = isNaN(quantidade) ? 0 : parseFloat(quantidade);
+      saldo_salario = quantidade;
+            let salarioFormatado = saldo_salario.toFixed(2);
+            localStorage.setItem("qtd_salario", salarioFormatado);
+      mostra_Valores();
+      break;
+    case "2":
+      quantidade = isNaN(quantidade) ? 0 : parseFloat(quantidade);
+      saldo_transporte = quantidade;
+                  let transporteFormatado = saldo_transporte.toFixed(2);
+            localStorage.setItem("qtd_transporte", transporteFormatado);
+      mostra_Valores();
+      break;
+    case "3":
+    quantidade = isNaN(quantidade) ? 0 : parseFloat(quantidade);
+      saldo_refeicao = quantidade;
+      let refeicaoFormatado = saldo_refeicao.toFixed(2);
+            localStorage.setItem("qtd_refeicao", refeicaoFormatado);
+      mostra_Valores();
+      break;
+    default:
+      // Se nenhuma opção foi selecionada, exibir mensagem de erro
+      alert("Por favor, selecione uma opção.");
+      break;
+  }
+}
+}
+
+    function limpaTUDO() {
+      saldo_salario = 0
+      saldo_refeicao = 0
+      saldo_transporte = 0
+            let salarioFormatado = saldo_salario.toFixed(2);
+            localStorage.setItem("qtd_salario", salarioFormatado);
+      verifica_Dabloon();
+      mostra_Valores();
+    }
+
+
+    var dabloonmusic = document.getElementById("dabloon_music");
+
+  </script>
+
+
+
+
+
+</body>
+
+</html>
